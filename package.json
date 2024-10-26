@@ -1,4 +1,8 @@
 {
-  "name": "pino-grove",
+  "name": "pino-grove-root",
+  "private": true,
+  "workspaces": [
+    "./packages/*"
+  ],
   "packageManager": "yarn@4.1.1"
 }
