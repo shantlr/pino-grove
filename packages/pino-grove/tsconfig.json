@@ -1,7 +1,10 @@
 {
   "compilerOptions": {
     "esModuleInterop": true,
-    "types": ["node"]
+    "types": ["node"],
+    "declaration": true,
+    "declarationMap": true,
+    "declarationDir": "dist"
   },
   "include": ["src/**/*.ts"]
 }

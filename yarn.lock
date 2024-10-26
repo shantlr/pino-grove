@@ -2182,12 +2182,15 @@ __metadata:
     picocolors: "npm:^1.1.1"
     pino: "npm:^9.5.0"
     prettier: "npm:^3.3.3"
+    rollup-plugin-node-externals: "npm:^7.1.3"
     sade: "npm:^1.8.1"
     split2: "npm:^4.2.0"
     tsx: "npm:^4.19.1"
     typescript: "npm:^5.6.3"
     typescript-eslint: "npm:^8.11.0"
     vite: "npm:^5.4.10"
+  bin:
+    pino-grove: ./bin/cli.mjs
   languageName: unknown
   linkType: soft
 
@@ -2332,6 +2335,15 @@ __metadata:
   version: 1.0.4
   resolution: "reusify@npm:1.0.4"
   checksum: 10c0/c19ef26e4e188f408922c46f7ff480d38e8dfc55d448310dfb518736b23ed2c4f547fb64a6ed5bdba92cd7e7ddc889d36ff78f794816d5e71498d645ef476107
+  languageName: node
+  linkType: hard
+
+"rollup-plugin-node-externals@npm:^7.1.3":
+  version: 7.1.3
+  resolution: "rollup-plugin-node-externals@npm:7.1.3"
+  peerDependencies:
+    rollup: ^3.0.0 || ^4.0.0
+  checksum: 10c0/79d0a964cb488d442f571dd7ce29c53099ca40a76cb71fd985b9978d52efad31346b11138dced9c974e9881b4a56dce384afc0e6d42d9740cebb58120028a37a
   languageName: node
   linkType: hard
 

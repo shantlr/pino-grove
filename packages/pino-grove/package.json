@@ -2,9 +2,13 @@
   "name": "pino-grove",
   "version": "0.0.0",
   "packageManager": "yarn@4.1.1",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": "./bin/cli.mjs",
   "scripts": {
     "dev": "tsx src/test/index.ts | tsx ./src/cli/index.ts",
-    "build": "vite build",
+    "build": "vite build && tsc --emitDeclarationOnly",
     "prepare": "yarn build"
   },
   "devDependencies": {
@@ -17,6 +21,7 @@
     "globals": "^15.11.0",
     "pino": "^9.5.0",
     "prettier": "^3.3.3",
+    "rollup-plugin-node-externals": "^7.1.3",
     "sade": "^1.8.1",
     "tsx": "^4.19.1",
     "typescript": "^5.6.3",

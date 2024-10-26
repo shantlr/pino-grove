@@ -60,6 +60,7 @@ const IGNORED_FIELDS = {
   time: true,
   level: true,
   msg: true,
+  message: true,
   hostname: true,
   name: true,
   pid: true,
@@ -129,11 +130,14 @@ export const prettify = () => {
     }
 
     if (
-      'msg' in logObj &&
-      typeof logObj.msg === 'string' &&
-      logObj.msg.length
+      ('msg' in logObj &&
+        typeof logObj.msg === 'string' &&
+        logObj.msg.length) ||
+      ('message' in logObj &&
+        typeof logObj.message === 'string' &&
+        logObj.message.length)
     ) {
-      mainLine.push(logObj.msg as string);
+      mainLine.push((logObj.msg || logObj.message) as string);
     } else {
       mainLine.push(pc.gray('{empty message}'));
     }

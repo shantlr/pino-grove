@@ -12,9 +12,7 @@ const parseLine = () =>
       return {
         level: 30,
         time: Date.now(),
-        tags: ['info'],
         msg: line,
-        message: line,
       };
     }
   });
