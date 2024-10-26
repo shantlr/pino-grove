@@ -1,4 +1,5 @@
 import pc from 'picocolors';
+import { Colors } from 'picocolors/types';
 
 const LEVELS = {
   10: {
@@ -111,22 +112,82 @@ const formatField = (value: unknown, prefix = '', indent = FIELD_INDENT) => {
   return res.join('\n');
 };
 
-export const prettify = () => {
+export type PrettyPrefixPart = 'level' | 'time' | 'time-delta';
+
+export type ICustomFormmatters = Record<
+  string,
+  (
+    logObj: Record<string, unknown>,
+    context: { pc: Colors },
+  ) => string | null | undefined
+>;
+
+export type PrettyOption<CustomFormatters extends ICustomFormmatters> = {
+  prefix?: {
+    parts?: (keyof CustomFormatters | PrettyPrefixPart)[];
+    formatters?: CustomFormatters;
+  };
+  ignoreFormatFields?: Record<string, boolean>;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const prettify = (options?: PrettyOption<any>) => {
   let lastLogTimestamp: number = null;
+  const parts = options?.prefix?.parts ?? ['level', 'time', 'time-delta'];
+
   return (logObj: Record<string, unknown>): string => {
     const res: string[] = [];
     const mainLine: string[] = [];
 
-    mainLine.push(
-      LEVELS[logObj.level as keyof typeof LEVELS]?.label ?? pc.gray('???'),
-    );
+    const date =
+      'time' in logObj && typeof logObj.time === 'number'
+        ? new Date(logObj.time)
+        : null;
 
-    if ('time' in logObj && typeof logObj.time === 'number') {
-      const date = new Date(logObj.time);
-      mainLine.push(`${formatDate(date)}`);
-      const delta = lastLogTimestamp ? date.getTime() - lastLogTimestamp : null;
-      lastLogTimestamp = logObj.time;
-      mainLine.push(pc.gray(formatDateDelta(delta)));
+    parts.forEach((part) => {
+      switch (part) {
+        case 'level': {
+          mainLine.push(
+            LEVELS[logObj.level as keyof typeof LEVELS]?.label ??
+              pc.gray('???'),
+          );
+          break;
+        }
+        case 'time': {
+          if (date) {
+            mainLine.push(formatDate(date));
+          }
+          break;
+        }
+        case 'time-delta': {
+          if (date) {
+            const delta = lastLogTimestamp
+              ? date.getTime() - lastLogTimestamp
+              : null;
+            mainLine.push(pc.gray(formatDateDelta(delta)));
+          }
+          break;
+        }
+        default: {
+          if (typeof options?.prefix?.formatters?.[part] === 'function') {
+            try {
+              const str = options.prefix.formatters[part](logObj, { pc });
+              if (str) {
+                mainLine.push(str);
+              }
+            } catch (err) {
+              console.error(
+                err,
+                `[pino-grove] Error in custom formatter for ${String(part)}`,
+              );
+            }
+          }
+        }
+      }
+    });
+
+    if (date) {
+      lastLogTimestamp = date.valueOf();
     }
 
     if (
@@ -141,15 +202,15 @@ export const prettify = () => {
     } else {
       mainLine.push(pc.gray('{empty message}'));
     }
+    res.push(mainLine.join(' '));
 
     for (const [key, value] of Object.entries(logObj)) {
-      if (key in IGNORED_FIELDS) {
+      if (IGNORED_FIELDS[key] || options?.ignoreFormatFields?.[key]) {
         continue;
       }
       res.push(formatField(value, `${formatFieldName(key)}:`, '  '));
     }
 
-    res.push(mainLine.join(' '));
     return res.join('\n') + '\n';
   };
 };

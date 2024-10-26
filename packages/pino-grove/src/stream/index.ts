@@ -1,7 +1,7 @@
 import { Readable, Transform } from 'stream';
 import { pipeline } from 'stream/promises';
 import split2 from 'split2';
-import { prettify } from './prettify';
+import { ICustomFormmatters, prettify, PrettyOption } from './prettify';
 
 const parseLine = () =>
   split2((line: string) => {
@@ -17,8 +17,9 @@ const parseLine = () =>
     }
   });
 
-const format = () => {
-  const pretiffier = prettify();
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const format = (options?: PrettyOption<any>) => {
+  const pretiffier = prettify(options);
   return new Transform({
     objectMode: true,
     transform(chunk, enc, done) {
@@ -28,6 +29,9 @@ const format = () => {
   });
 };
 
-export const streamInput = async (source: Readable) => {
-  await pipeline(source, parseLine(), format(), process.stdout);
+export const streamInput = async <CustomFormatters extends ICustomFormmatters>(
+  source: Readable,
+  options?: PrettyOption<CustomFormatters>,
+) => {
+  await pipeline(source, parseLine(), format(options), process.stdout);
 };

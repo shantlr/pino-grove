@@ -13,6 +13,7 @@ const main = () => {
   logger.fatal(`fatal error`);
   logger.info('');
   logger.info({
+    scope: 'test-scope',
     string: 'HELLO world',
     number: 42,
     true: true,
@@ -34,6 +35,7 @@ const main = () => {
       key: 'value',
     },
   });
+  logger.error(new Error('some error has been thrown'), 'caught an error');
 };
 
 main();

@@ -1,13 +1,22 @@
 {
   "name": "pino-grove",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "packageManager": "yarn@4.1.1",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": "./bin/cli.mjs",
+  "files": [
+    "dist",
+    "src",
+    "bin",
+    "README.md",
+    "tsconfig.json",
+    "vite.config.json"
+  ],
   "scripts": {
     "dev": "tsx src/test/index.ts | tsx ./src/cli/index.ts",
+    "dev:custom": "tsx src/test/index.ts | tsx ./src/test/custom.ts",
     "build": "vite build && tsc --emitDeclarationOnly",
     "prepare": "yarn build"
   },
