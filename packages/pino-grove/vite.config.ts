@@ -10,6 +10,7 @@ export default defineConfig({
     lib: {
       entry: {
         index: './src/index.ts',
+        express: './src/express/index.ts',
         cli: './src/cli/index.ts',
       },
     },
