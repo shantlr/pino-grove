@@ -54,22 +54,23 @@ export const addLogger = <L extends Logger>(logger: L): RequestHandler => {
   };
 };
 
-export const expressConfig = createConfig({
-  prefix: {
-    append: ['express-req'],
-    formatters: {
-      'express-req': (logObj, { pc }) => {
-        if (logObj['req.id'] && logObj['req.method']) {
-          return `[${logObj['req.id']}] ${logObj['req.method']} ${pc.gray(logObj['req.path'] as string)}${logObj['req.status'] ? ` {${logObj['req.status']}}` : ''}`;
-        }
+export const expressConfig = () =>
+  createConfig({
+    prefix: {
+      append: ['express-req'],
+      formatters: {
+        'express-req': (logObj, { pc }) => {
+          if (logObj['req.id'] && logObj['req.method']) {
+            return `[${logObj['req.id']}] ${logObj['req.method']} ${pc.gray(logObj['req.path'] as string)}${logObj['req.status'] ? ` {${logObj['req.status']}}` : ''}`;
+          }
+        },
       },
     },
-  },
-  ignoreFormatFields: {
-    'req.id': true,
-    'req.method': true,
-    'req.path': true,
-    'req.duration': true,
-    'res.status': true,
-  },
-});
+    ignoreFormatFields: {
+      'req.id': true,
+      'req.method': true,
+      'req.path': true,
+      'req.duration': true,
+      'res.status': true,
+    },
+  });
