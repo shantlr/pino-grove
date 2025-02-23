@@ -1,6 +1,6 @@
 {
   "name": "pino-grove",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "packageManager": "yarn@4.1.1",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -28,6 +28,7 @@
     "@types/express": "^5.0.0",
     "@types/node": "^22.8.1",
     "@types/split2": "^4.2.3",
+    "@types/strip-ansi": "^5.2.1",
     "eslint": "^9.13.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
@@ -44,6 +45,7 @@
   },
   "dependencies": {
     "picocolors": "^1.1.1",
-    "split2": "^4.2.0"
+    "split2": "^4.2.0",
+    "strip-ansi": "^7.1.0"
   }
 }

@@ -1,5 +1,6 @@
 import pc from 'picocolors';
 import { Colors } from 'picocolors/types';
+import stripAnsi from 'strip-ansi';
 
 const LEVELS = {
   10: {
@@ -68,18 +69,35 @@ const IGNORED_FIELDS = {
 };
 
 const formatFieldName = pc.blue;
-const formatString = (value: string) => `'${pc.green(value)}'`;
+const formatString = (value: string, indent?: string) => {
+  // Format multiline so line starts are aligned
+  if (indent) {
+    return `'${value
+      .split('\n')
+      .map((line, index) => {
+        const part = pc.green(line);
+        if (index === 0) {
+          return part;
+        }
+        return `${indent}${part}`;
+      })
+      .join('\n')}'`;
+  }
+
+  return `'${pc.green(value)}'`;
+};
 const formatNumber = (value: number) => `${pc.yellow(value)}`;
 const formatBoolean = (value: boolean) => pc.blueBright(String(value));
 const FIELD_INDENT = '  ';
 const NESTED_INDENT = pc.gray('..');
+const FILLER = (length: number) => pc.gray('.'.repeat(length));
 const formatField = (value: unknown, prefix = '', indent = FIELD_INDENT) => {
   switch (typeof value) {
     case 'number': {
       return `${indent}${prefix} ${formatNumber(value)}`;
     }
     case 'string': {
-      return `${indent}${prefix} ${formatString(value)}`;
+      return `${indent}${prefix} ${formatString(value, value.includes('\n') ? `${indent}${FILLER(stripAnsi(prefix).length + 2)}` : undefined)}`;
     }
     case 'boolean': {
       return `${indent}${prefix} ${formatBoolean(value)}`;
@@ -136,6 +154,10 @@ export const prettify = (options?: PrettyOption<any>) => {
   const parts = options?.prefix?.parts ?? ['level', 'time', 'time-delta'];
 
   return (logObj: Record<string, unknown>): string => {
+    if (!logObj || typeof logObj !== 'object') {
+      return String(logObj);
+    }
+
     const res: string[] = [];
     const mainLine: string[] = [];
 
