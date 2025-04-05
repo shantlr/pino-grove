@@ -61,7 +61,7 @@ export const expressConfig = () =>
       formatters: {
         'express-req': (logObj, { pc }) => {
           if (logObj['req.id'] && logObj['req.method']) {
-            return `[${logObj['req.id']}] ${logObj['req.method']} ${pc.gray(logObj['req.path'] as string)}${logObj['req.status'] ? ` {${logObj['req.status']}}` : ''}`;
+            return `[${logObj['req.id']}] ${logObj['req.method']} ${pc.gray(logObj['req.path'] as string)}${logObj['res.status'] ? ` {${logObj['res.status']}}` : ''}`;
           }
         },
       },
