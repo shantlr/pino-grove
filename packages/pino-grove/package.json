@@ -20,6 +20,7 @@
   "scripts": {
     "dev": "tsx src/test/index.ts | tsx ./src/cli/index.ts",
     "dev:custom": "tsx src/test/index.ts | tsx ./src/test/custom.ts",
+    "test": "",
     "build": "tsc",
     "prepare": "yarn build"
   },
